@@ -1,0 +1,44 @@
+.form {
+  padding: 6rem;
+  background-color: #fff;
+  width: 55rem;
+  margin: 0 auto;
+}
+.data_box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.data_box input {
+  margin-bottom: 2rem;
+  padding: 13px;
+  color: #888;
+  border: none;
+  background-color: #f0f0f0;
+  font-size: 1.6rem;
+}
+.data_box label {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.control {
+  display: flex;
+  justify-content: end;
+  gap: 2rem;
+  margin-top: 15px;
+}
+.control button {
+  border: none;
+  background-color: #f0f0f0;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.cancel {
+  color: #666;
+}
+.login {
+  background: linear-gradient(to right, #799ecdda, #0a3e8de6);
+  color: #fff;
+}

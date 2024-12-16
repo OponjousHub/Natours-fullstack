@@ -1,0 +1,27 @@
+.mainLayout {
+  background-color: #f0f0f0;
+  padding: 6rem 0;
+}
+footer {
+  font-size: 1.4rem;
+  padding: 4rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2rem;
+}
+.footer_links {
+  display: flex;
+  gap: 1rem;
+  color: #888;
+}
+.footer_links p {
+  cursor: pointer;
+}
+.right_reserve {
+  color: #aaa;
+  float: right;
+  font-size: 13px;
+  margin-top: 0;
+  padding-top: 0;
+}

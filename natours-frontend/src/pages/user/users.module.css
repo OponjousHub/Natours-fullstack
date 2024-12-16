@@ -1,0 +1,97 @@
+h1 {
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  background: linear-gradient(to right, #799ecdda, #0a3e8de6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.form {
+  margin: 0 15rem 10rem 15rem;
+}
+.input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3rem;
+}
+.input label {
+  text-transform: uppercase;
+  font-size: 1.6rem;
+}
+.input input {
+  padding: 1rem;
+  color: #777;
+}
+input:focus {
+  outline: none;
+}
+.photo {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  cursor: pointer;
+  font-size: 1.6rem;
+  color: #0a3e8d9a;
+}
+.photo p {
+  border-bottom: 1px solid #0a3e8de6;
+}
+.logo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+}
+.cta_btn {
+  float: right;
+}
+.cta_btn button,
+.cta_btn button:link,
+.cta_btn button:visited {
+  font-size: 1.6rem;
+  padding: 1.2rem 2rem;
+  border-radius: 10rem;
+  text-transform: uppercase;
+  display: inline-block;
+  text-decoration: none;
+  position: relative;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  font-weight: 400;
+  color: #fff;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /*Add later when we use this for the button in form*/
+  border: none;
+  cursor: pointer;
+
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    right bottom,
+    from(rgba(107, 193, 228, 0.781)),
+    to(rgba(6, 67, 158, 0.61))
+  );
+}
+.cta_btn button:hover {
+  -webkit-transform: translateY(-3px);
+  transform: translateY(-3px);
+  -webkit-box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.cta_btn:active {
+  -webkit-transform: translateY(-1px);
+  transform: translateY(-1px);
+  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+.pass_margin {
+  margin-top: 6rem;
+}
+::placeholder {
+  font-size: 3rem;
+  color: #bcbaba;
+  display: flex;
+  align-content: center;
+  opacity: 1;
+}

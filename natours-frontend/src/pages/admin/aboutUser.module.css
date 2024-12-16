@@ -1,0 +1,23 @@
+.about_container {
+  padding: 3rem 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.data {
+  display: flex;
+  gap: 2rem;
+  align-items: baseline;
+}
+.data label {
+  font-weight: 600;
+  color: #333;
+  font-size: 1.7rem;
+}
+.data p {
+  font-size: 1.4rem;
+}
+.sex {
+}
+.address {
+}

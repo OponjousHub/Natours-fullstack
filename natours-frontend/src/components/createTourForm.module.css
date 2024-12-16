@@ -1,0 +1,96 @@
+.form {
+  background-color: #fff;
+  width: 90%;
+  margin: 0 auto;
+}
+.input_container {
+  display: grid;
+  grid-template-columns: 50% 1fr;
+  column-gap: 2rem;
+}
+
+.input_left {
+  grid-column: 1/2;
+}
+.input_right {
+  grid-column: 2/3;
+}
+.small_input {
+  grid-column: 1/-1;
+}
+.img_control {
+  grid-column: 1/-1;
+}
+.input_inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 1.4rem;
+}
+
+/*////////////////// Buttons/////////////////////////*/
+
+.img_control {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4rem;
+}
+.img_control button {
+  border: none;
+  background-color: #f0f0f0;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.choose button {
+  color: #777;
+  border: 0.5px solid #777;
+  font-size: 1.6rem;
+}
+.choose span {
+  font-size: 1.6rem;
+  margin-left: 10px;
+}
+.create {
+  background: linear-gradient(to right, #799ecdda, #0a3e8de6);
+  color: #fff;
+}
+
+/*/ //////////////////// inputs textarea and select///////////////*/
+.data_box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+input {
+  margin-bottom: 2rem;
+  padding: 13px;
+  color: #888;
+  border: none;
+  background-color: #f0f0f0;
+  font-size: 1.6rem;
+}
+/*//////////////////////////////////////////////*/
+.data_box_small input {
+width: 80rem; 
+}
+/*/ /////////////////////////////////////////////*/
+.data_box select,
+.data_box textarea {
+  margin-bottom: 2rem;
+  padding: 13px;
+  color: #888;
+  border: none;
+  background-color: #f0f0f0;
+  font-size: 1.6rem;
+}
+.data_box option {
+  color: #777;
+}
+.data_box label {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+::placeholder {
+  font-size: 1.4rem;
+}

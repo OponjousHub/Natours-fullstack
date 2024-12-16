@@ -1,0 +1,46 @@
+.manage_users {
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.users_link {
+  list-style: none;
+  text-decoration: none;
+  color: inherit;
+}
+.users_list:hover {
+  background-color: #d9e3f2da;
+}
+
+.users_list {
+  margin-bottom: 1rem !important;
+  display: grid;
+  grid-template-columns: 15% 75% 10%;
+  align-items: center;
+  justify-self: center;
+  background-color: #f0f0f0;
+  color: #666;
+  width: 60%;
+  padding: 0.5rem 1rem;
+}
+.users_list img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+}
+.users_name {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+}
+.users_name h4 {
+  font-size: 1.8rem;
+}
+.users_name p {
+  font-size: 1.1rem;
+}
+.delete {
+  margin: auto;
+}

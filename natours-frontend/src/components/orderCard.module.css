@@ -1,0 +1,33 @@
+.order_container {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  gap: 1.5rem;
+  padding-top: 3.5rem;
+}
+.order_card {
+  /* padding: 1.5rem; */
+  border: 1px solid #888;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 60%;
+  display: flex;
+  margin: 0 auto;
+}
+.order_card img {
+  width: 28%;
+}
+.order_box {
+  display: flex;
+  flex-direction: column;
+  /* gap: 0.5rem; */
+  margin-left: 1rem;
+  height: 9rem;
+}
+.order_box h3 {
+  font-size: 1.7rem;
+  margin-top: 7px;
+}
+.order_box p {
+  font-size: 11px;
+}
