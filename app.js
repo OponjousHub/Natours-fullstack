@@ -4,6 +4,8 @@ const morgan = require("morgan");
 const tourRouter = require("./routes/tourRoute");
 const userRouter = require("./routes/userRoute");
 const reviewRouter = require("./routes/reviewRoute");
+const AppError = require("./utils/appError");
+const ErrorGlobalHandler = require("./controllers/errorController");
 
 const app = express();
 
@@ -19,9 +21,10 @@ app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);
 
-// const port = process.env.PORT || 3000;
-// app.listen(port, () => {
-//   console.log(`App running on port: ${port}...`);
-// });
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server.`, 404));
+});
+
+app.use(ErrorGlobalHandler);
 
 module.exports = app;

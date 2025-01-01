@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
+const validator = require("validator");
 
 const tourSchema = new mongoose.Schema(
   {
@@ -8,11 +9,16 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       unique: true,
       required: [true, "A tour must have a name"],
+      maxlength: [50, "A name must be less than or equal 50 characters!"],
+      minlength: [8, " Name must be more than more or equal 8 characters"],
+      // validate: [validator.isAlpha, "Name must only contain characters."],
     },
     slug: String,
     ratingAverage: {
       type: "Number",
       default: 4.5,
+      min: [1, "A rating must be above 1.0"],
+      max: [5, "A rating must not be below 5.0"],
     },
     ratingQuantity: {
       type: "Number",
@@ -32,11 +38,18 @@ const tourSchema = new mongoose.Schema(
       },
     },
     price: {
-      type: String,
-      // required: [true, "A Tour must have a price!"],
+      type: Number,
+      required: [true, "A Tour must have a price!"],
     },
     priceDiscount: {
-      type: "Number",
+      type: Number,
+      validate: {
+        // This function does not work on update, only on create doc
+        validator: function (val) {
+          return val < this.price;
+        },
+        message: "Discount price ({VALUE}) must be below regular price!",
+      },
     },
     summary: {
       type: String,
@@ -51,6 +64,10 @@ const tourSchema = new mongoose.Schema(
       // required: [true, "A tour must have an image cover!"],
     },
     images: [String],
+    secretTour: {
+      type: Boolean,
+      default: false,
+    },
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -67,17 +84,17 @@ const tourSchema = new mongoose.Schema(
       address: String,
       description: String,
     },
-    location: [
+    locations: [
       {
         type: {
           type: String,
           default: "Point",
           enum: ["Point"],
         },
-        coordinates: ["Number"],
+        coordinates: [Number],
         address: String,
         description: String,
-        day: "Number",
+        day: Number,
       },
     ],
   },
@@ -98,8 +115,27 @@ tourSchema.pre("save", function (next) {
   next();
 });
 
-tourSchema.post("save", function (doc, next) {
-  console.log(doc);
+// tourSchema.post("save", function (doc, next) {
+//   console.log(doc);
+//   next();
+// });
+
+// QUERY MIDDLEWARE
+tourSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
+  this.start = Date.now();
+  next();
+});
+
+tourSchema.post(/^find/, function (doc, next) {
+  console.log(`This doc took ${Date.now() - this.start} milliseconds`);
+
+  next();
+});
+
+// AGGREGATION MIDDLEWARE
+tourSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
   next();
 });
 
