@@ -2,16 +2,11 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const app = require("./app");
 
-process.on(
-  "uncaughtException"(() => {
-    console.log(err.name, err.message);
-    console.log("UNCAUGHTEXCEPTION shutting down");
-    server.close(() => {
-      process.exit(1);
-    });
-  })
-);
-
+process.on("uncaughtException", (err) => {
+  console.log(err.name, err.message);
+  console.log("UNCAUGHTEXCEPTION shutting down");
+  process.exit(1);
+});
 dotenv.config({ path: "./config.env" });
 
 const DB = process.env.DB_CONNECTING_STRING;

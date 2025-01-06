@@ -34,7 +34,7 @@ function CreateTourForm() {
 
               <input
                 id="location"
-                name="location[]"
+                name="location"
                 type="text"
                 defaultValue="Lagos Nigeria, 6.5960745,3.3379997, 1 "
                 placeholder="description, longitude, latitude, day"
@@ -44,7 +44,7 @@ function CreateTourForm() {
               <label htmlFor="location3">Location 3</label>
               <input
                 id="location3"
-                name="location[]"
+                name="location"
                 type="text"
                 defaultValue="Lagos Nigeria, 6.5960745,3.3379997, 3 "
                 placeholder="description, longitude, latitude, day"
@@ -57,6 +57,7 @@ function CreateTourForm() {
                 name="tarea"
                 row="5"
                 col="30"
+                defaultValue="Breathtaking hike through the Canadian Banff National Park"
                 placeholder="Write a brief summary"
               ></textarea>
             </div>
@@ -68,8 +69,18 @@ function CreateTourForm() {
                 id="startsLoca"
                 name="startLocation"
                 type="text"
-                defaultValue="Lagos Nigeria, 6.5960745,3.3379997, 1 "
-                placeholder="city country, longitude, latitude, address"
+                defaultValue="Lagos Nigeria, 6.5960745, 3.3379997 "
+                placeholder="city country, longitude, latitude"
+              />
+            </div>
+            <div className={classes.data_box}>
+              <label htmlFor="startAddres">Start Location Address</label>
+              <input
+                id="startAddres"
+                name="startLocationAdd"
+                type="text"
+                defaultValue="224 Banff Ave, Banff, AB, Canada"
+                placeholder="start location address"
               />
             </div>
             <div className={classes.data_box}>
@@ -78,7 +89,7 @@ function CreateTourForm() {
                 id="date"
                 name="date"
                 type="text"
-                defaultValue="2024/12/28, 2025/02/01, 2025/03/09"
+                defaultValue="2025/1/28, 2025/02/01, 2025/03/09"
                 placeholder="YYYY/MM/DD, YYYY/MM/DD, YYYY/MM/DD..."
               />
             </div>
@@ -86,7 +97,8 @@ function CreateTourForm() {
               <label htmlFor="location2">Location 2</label>
               <input
                 id="location2"
-                name="location[]"
+                // className="locations"
+                name="location"
                 type="text"
                 defaultValue="Lagos Nigeria, 6.5960745,3.3379997, 2 "
                 placeholder="description, longitude, latitude, day"
@@ -96,11 +108,12 @@ function CreateTourForm() {
               <label htmlFor="location4">Location 4</label>
               <input
                 id="location4"
-                name="location[]"
+                // className="locations"
+                name="location"
                 type="text"
                 defaultValue="Lagos Nigeria, 6.5960745,3.3379997, 4 "
                 placeholder="description, longitude, latitude, day"
-                className="locat"
+                // className="locat"
               />
             </div>
             <div className={classes.data_box}>
@@ -110,6 +123,7 @@ function CreateTourForm() {
                 name="tarea2"
                 row="5"
                 col="30"
+                defaultValue="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
                 placeholder="Describe the tour"
               ></textarea>
             </div>
@@ -152,15 +166,23 @@ export default CreateTourForm;
 export async function action({ request, params }) {
   const data = await request.formData();
 
-  var fields = document.querySelectorAll("locat").value;
-  console.log(fields);
+  const startDates = [data.get("date").split(", ")];
+  const descrptionCoord = [data.get("startLocation").split(", ")];
+  const startLocation = {
+    type: "point",
+    address: data.get("startLocationAdd"),
+    description: descrptionCoord[0][0],
+    coordinates: [descrptionCoord[0][1], descrptionCoord[0][2]],
+  };
+
+  console.log(locationArr);
 
   const enteredData = {
     title: data.get("title"),
-    startLocation: data.get("startLocation"),
-    startDates: data.get("date"),
+    startLocation: startLocation,
+    startDates: startDates,
     difficulty: data.get("difficulty"),
-    location: data.get("[name='location']"),
+    location: [data.get("location")],
     summary: data.get("tarea"),
     description: data.get("tarea2"),
     duration: data.get("duration"),
@@ -168,5 +190,8 @@ export async function action({ request, params }) {
     maxGroup: data.get("maxgroup"),
   };
   console.log(enteredData);
+
+  // console.log(startDates);
+  // console.log(startLocation);
   return enteredData;
 }
