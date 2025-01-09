@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// import TourContextProvider from "./store/tour-context";
 import RootLayout from "./pages/rootLayout";
 import SettingsRootLayout from "./pages/settingsRootLayout";
 import OverviewPage from "./pages/overview";
@@ -90,7 +89,6 @@ const router = createBrowserRouter([
           },
           {
             path: "manage-tours",
-            // element: <ManageToursPage />,
             children: [
               {
                 index: true,

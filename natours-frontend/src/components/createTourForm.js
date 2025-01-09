@@ -1,8 +1,13 @@
-import { Form } from "react-router-dom";
-import { Input, Select, TextArea } from "../utility/input";
+import { Form, redirect, useActionData } from "react-router-dom";
+// import { Input, Select, TextArea } from "../utility/input";
 import classes from "./createTourForm.module.css";
 
 function CreateTourForm() {
+  const data = useActionData();
+  // if (data.isError) {
+  //   return data.message;
+  // }
+
   return (
     <>
       <Form className={classes.form} method="post">
@@ -34,9 +39,9 @@ function CreateTourForm() {
 
               <input
                 id="location"
-                name="location"
+                name="location1"
                 type="text"
-                defaultValue="Lagos Nigeria, 6.5960745,3.3379997, 1 "
+                defaultValue="Lagos Nigeria, 6.5960745, 3.3379997, 1 "
                 placeholder="description, longitude, latitude, day"
               />
             </div>
@@ -44,9 +49,9 @@ function CreateTourForm() {
               <label htmlFor="location3">Location 3</label>
               <input
                 id="location3"
-                name="location"
+                name="location3"
                 type="text"
-                defaultValue="Lagos Nigeria, 6.5960745,3.3379997, 3 "
+                defaultValue="Lagos Nigeria, 6.5960745, 3.3379997, 3 "
                 placeholder="description, longitude, latitude, day"
               />
             </div>
@@ -98,9 +103,9 @@ function CreateTourForm() {
               <input
                 id="location2"
                 // className="locations"
-                name="location"
+                name="location2"
                 type="text"
-                defaultValue="Lagos Nigeria, 6.5960745,3.3379997, 2 "
+                defaultValue="Lagos Nigeria, 6.5960745, 3.3379997, 2 "
                 placeholder="description, longitude, latitude, day"
               />
             </div>
@@ -108,12 +113,10 @@ function CreateTourForm() {
               <label htmlFor="location4">Location 4</label>
               <input
                 id="location4"
-                // className="locations"
-                name="location"
+                name="location4"
                 type="text"
-                defaultValue="Lagos Nigeria, 6.5960745,3.3379997, 4 "
+                defaultValue="Lagos Nigeria, 6.5960745, 3.3379997, 4 "
                 placeholder="description, longitude, latitude, day"
-                // className="locat"
               />
             </div>
             <div className={classes.data_box}>
@@ -153,6 +156,7 @@ function CreateTourForm() {
             </p>
             <p className={classes.control}>
               <button className={classes.create}>Submit</button>
+              {/* {data && data.isError && <p>{data.message}</p>} */}
             </p>
           </div>
         </div>
@@ -172,26 +176,98 @@ export async function action({ request, params }) {
     type: "point",
     address: data.get("startLocationAdd"),
     description: descrptionCoord[0][0],
-    coordinates: [descrptionCoord[0][1], descrptionCoord[0][2]],
+    coordinates: [descrptionCoord[0][1] * 1, descrptionCoord[0][2] * 1],
   };
 
-  console.log(locationArr);
+  const locat1 = data.get("location1").split(", ");
+  const locat2 = data.get("location2").split(", ");
+  const locat3 = data.get("location3").split(", ");
+  const locat4 = data.get("location4").split(", ");
+
+  let location;
+
+  if (locat4.length > 1) {
+    location = [
+      {
+        description: locat1[0],
+        type: "point",
+        coordinates: [locat1[1] * 1, locat1[2] * 1],
+        day: locat1[3] * 1,
+      },
+      {
+        description: locat2[0],
+        type: "point",
+        coordinates: [locat2[1] * 1, locat2[2] * 1],
+        day: locat2[3] * 1,
+      },
+      {
+        description: locat3[0],
+        type: "point",
+        coordinates: [locat3[1] * 1, locat3[2] * 1],
+        day: locat3[3] * 1,
+      },
+
+      {
+        description: locat4[0],
+        type: "point",
+        coordinates: [locat4[1] * 1, locat4[2] * 1],
+        day: locat4[3] * 1,
+      },
+    ];
+  } else {
+    location = [
+      {
+        description: locat1[0],
+        type: "point",
+        coordinates: [locat1[1] * 1, locat1[2] * 1],
+        day: locat1[3] * 1,
+      },
+      {
+        description: locat2[0],
+        type: "point",
+        coordinates: [locat2[1] * 1, locat2[2] * 1],
+        day: locat2[3] * 1,
+      },
+      {
+        description: locat3[0],
+        type: "point",
+        coordinates: [locat3[1] * 1, locat3[2] * 1],
+        day: locat3[3] * 1,
+      },
+    ];
+  }
 
   const enteredData = {
-    title: data.get("title"),
+    name: data.get("title"),
     startLocation: startLocation,
     startDates: startDates,
     difficulty: data.get("difficulty"),
-    location: [data.get("location")],
+    location: location,
     summary: data.get("tarea"),
     description: data.get("tarea2"),
-    duration: data.get("duration"),
-    price: data.get("price"),
-    maxGroup: data.get("maxgroup"),
+    duration: data.get("duration") * 1,
+    price: data.get("price") * 1,
+    maxGroupSize: data.get("maxgroup") * 1,
   };
   console.log(enteredData);
 
-  // console.log(startDates);
-  // console.log(startLocation);
-  return enteredData;
+  const response = await fetch("http://127.0.0.1:8000/api/v1/tours", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(enteredData),
+  });
+
+  if (!response.ok) {
+    return {
+      isError: true,
+      message: "Could not create tour! Please try again later.",
+    };
+  } else {
+    const res = new Response(response, { statusCode: 201 });
+    return res;
+  }
+
+  return redirect("/");
 }

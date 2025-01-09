@@ -15,18 +15,21 @@ const tourSchema = new mongoose.Schema(
     },
     slug: String,
     ratingAverage: {
-      type: "Number",
+      type: Number,
       default: 4.5,
       min: [1, "A rating must be above 1.0"],
       max: [5, "A rating must not be below 5.0"],
     },
     ratingQuantity: {
-      type: "Number",
+      type: Number,
       default: 0,
     },
-    duration: "String",
+    duration: {
+      type: Number,
+      required: [true, "A tour must have a duration"],
+    },
     maxGroupSize: {
-      type: "Number",
+      type: Number,
       required: [true, "A tour must have maximum group size!"],
     },
     difficulty: {
