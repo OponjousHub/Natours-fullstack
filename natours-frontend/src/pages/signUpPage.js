@@ -1,19 +1,26 @@
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useActionData } from "react-router-dom";
 import classes from "./loginPage.module.css";
 
 function Signup() {
+  const data = useActionData;
+  // if (data) console.log(data);
   return (
     <>
-      <Form className={classes.form}>
+      <Form className={classes.form} method="post">
         <h1>Create an account</h1>
         <div className={classes.data_box}>
-          <label htmlFor="firstname ">First Name</label>
-          <input id="firstname" type="text" name="firstname" />
+          <label htmlFor="firstname ">Full Name</label>
+          <input
+            id="firstname"
+            type="text"
+            name="fullName"
+            placeholder="Firstname Lastname"
+          />
         </div>
-        <div className={classes.data_box}>
+        {/* <div className={classes.data_box}>
           <label htmlFor="lastname ">Last Name</label>
           <input id="lastname" type="text" name="lastname" />
-        </div>
+        </div> */}
         <div className={classes.data_box}>
           <label htmlFor="email ">Email address</label>
           <input id="email" type="email" name="email" />
@@ -29,11 +36,11 @@ function Signup() {
           />
         </div>
         <div className={classes.data_box}>
-          <label htmlFor="passwod ">Confirm Password</label>
+          <label htmlFor="passwodCon ">Confirm Password</label>
           <input
-            id="passwod"
+            id="passwodCon"
             type="password"
-            name="passwod"
+            name="passwodCon"
             minLength={8}
             placeholder="........"
           />
@@ -53,3 +60,33 @@ function Signup() {
 }
 
 export default Signup;
+
+export async function action({ request, params }) {
+  const data = await request.formData();
+
+  const signupData = {
+    name: data.get("fullName"),
+    email: data.get("email"),
+    password: data.get("passwod"),
+    passwordConfirm: data.get("passwodCon"),
+  };
+  console.log(signupData);
+
+  const response = await fetch("https://127.0.0.1:8000/api/v1/signup", {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      body: JSON.stringify(signupData),
+    },
+  });
+  console.log(response);
+
+  if (!response.ok) {
+    const res = new Response("We could not sign you up now! Please try again", {
+      statusCode: 501,
+    });
+    return res;
+  } else {
+    return new Response(response, { statusCode: 201 });
+  }
+}

@@ -1,5 +1,12 @@
-import { CalendarBlank, Users, Star, TrendUp } from "@phosphor-icons/react";
-import { Link } from "react-router-dom";
+import {
+  CalendarBlank,
+  Users,
+  Star,
+  TrendUp,
+  Clock,
+  MapPin,
+} from "@phosphor-icons/react";
+import { Link, useLoaderData } from "react-router-dom";
 import TourImg from "../img/tours/tour-2-cover.jpg";
 import TourImg1 from "../img/tours/tour-4-cover.jpg";
 import TourImg2 from "../img/tours/tour-5-cover.jpg";
@@ -11,6 +18,9 @@ import logo from "../img/logo-white.png";
 import classes from "./tour.module.css";
 
 function Tour() {
+  const data = useLoaderData();
+  const tour = data.data.tour;
+  console.log(data);
   return (
     <>
       <div className={classes.cover_img_box}>
@@ -21,9 +31,21 @@ function Tour() {
           }}
           className={classes.cover_img}
         >
-          <h1 className={classes.tour_title_box}>
-            <span className={classes.tour_title}>The Sea Explorer</span>
-          </h1>
+          <div className={classes.title_position}>
+            <h3 className={classes.tour_title_box}>
+              <span className={classes.tour_title}>{tour.name}</span>
+            </h3>
+            <div className={classes.tour_describe_box}>
+              <div className={classes.describe_days}>
+                <Clock size={25} color="#fff" />
+                <p>{tour.duration} Days</p>
+              </div>
+              <div className={classes.describe_place}>
+                <MapPin size={25} color="#fff" />
+                <p>{tour.startLocation.description}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <section className={classes.section}>
@@ -33,22 +55,22 @@ function Tour() {
             <div className={classes.facts}>
               <CalendarBlank size={25} color="#2399ca" />
               <p className={classes.fact}>next date</p>
-              <p>June 2021</p>
+              <p>{tour.startDates[0]}</p>
             </div>
             <div className={classes.facts}>
               <TrendUp size={32} color="#2399ca" />
               <p className={classes.fact}>difficulty</p>
-              <p>medium</p>
+              <p>{tour.difficulty}</p>
             </div>
             <div className={classes.facts}>
               <Users size={25} color="#2399ca" />
               <p className={classes.fact}>Participants</p>
-              <p>15 people</p>
+              <p>{`${tour.maxGroupSize} people`} </p>
             </div>
             <div className={classes.facts}>
               <Star size={25} color="#2399ca" />
               <p className={classes.fact}>Rating</p>
-              <p>4 / 5</p>
+              <p>{`${tour.ratingAverage} / ${tour.ratingQuantity}`}</p>
             </div>
           </div>
           <div className={classes.guide_section}>
@@ -66,19 +88,8 @@ function Tour() {
           </div>
         </div>
         <div className={classes.about}>
-          <h2>About The Sea Explorer tour</h2>
-          <p>
-            Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est
-            laborum. Irure dolor in reprehenderit in voluptate velit esse cillum
-            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-            non proident, sunt in culpa qui officia deserunt mollit anim id est
-            laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur.
-          </p>
+          <h2>{`About ${tour.name}`}</h2>
+          <p>{tour.description}</p>
         </div>
       </section>
       <section className={classes.section_photos}>
@@ -196,10 +207,13 @@ function Tour() {
         </div>
         <div className={classes.cta_text}>
           <h2>What are you waiting for?</h2>
-          <p>7 days. 1 adventure. Infinite memories. Make it yours today!</p>
+          <p>
+            {tour.duration} days. 1 adventure. Infinite memories. Make it yours
+            today!
+          </p>
         </div>
         <Link to={"/"} className={classes.cta_btn}>
-          <button type="button">book tour now!</button>
+          <button type="button">Log in to book tour!</button>
         </Link>
       </section>
     </>
@@ -207,3 +221,17 @@ function Tour() {
 }
 
 export default Tour;
+
+export async function loader({ request, params }) {
+  console.log(params.tourId);
+  const id = params.tourId;
+  const response = await fetch(`http://127.0.0.1:8000/api/v1/tours/${id}`);
+
+  if (!response.ok) {
+    return new Response("Could not fetch the requested tour!", {
+      statusCode: 422,
+    });
+  }
+
+  return response;
+}

@@ -2,7 +2,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./pages/rootLayout";
 import SettingsRootLayout from "./pages/settingsRootLayout";
 import OverviewPage from "./pages/overview";
+import TourCard, { loader as AllTourLoader } from "./components/tourCard";
 import TourPage from "./pages/tour/tourPage";
+import { loader as TourLoader } from "./components/tour";
 import Users from "./pages/user/users";
 import EditUser from "./pages/user/editUser";
 import UserDetail from "./pages/user/userDetail";
@@ -12,7 +14,7 @@ import BillingsPage from "./pages/billingsPage";
 import ReviewsPage from "./pages/reviewsPage";
 import ReviewOnTour from "./components/review/reviewOnTour";
 import Login, { action as loginAction } from "./pages/loginPage";
-import Signup from "./pages/signUpPage";
+import Signup, { action as signupAction } from "./pages/signUpPage";
 import ManageToursPage from "./pages/tour/manageTourPage";
 import CreateTourPage from "./pages/tour/createTourPage";
 import { action as CreateTourAction } from "./components/createTourForm";
@@ -23,8 +25,8 @@ import AboutUser from "./pages/admin/aboutUser";
 import Delivered from "./pages/admin/delivered";
 import ManageReview from "./pages/admin/manageReview";
 import ManageBooking from "./pages/admin/manageBooking";
-import "./App.css";
 import ManageUsersPage from "./pages/user/manageUsersPage";
+import "./App.css";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <OverviewPage />,
+        loader: AllTourLoader,
       },
       {
         path: "tours",
@@ -45,6 +48,7 @@ const router = createBrowserRouter([
           {
             path: ":tourId",
             element: <TourPage />,
+            loader: TourLoader,
           },
         ],
       },
@@ -157,6 +161,7 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <Signup />,
+        action: signupAction,
       },
     ],
   },
