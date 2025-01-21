@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const fs = require("fs");
 const app = require("./app");
+const https = require("https");
 
 process.on("uncaughtException", (err) => {
   console.log(err.name, err.message);
@@ -20,10 +22,19 @@ mongoose
     console.log("Database connection successful!");
   });
 
+const options = {
+  key: fs.readFileSync("server.key"),
+  cert: fs.readFileSync("server.cert"),
+};
+
 const port = process.env.PORT || 8000;
+// const httpPort = process.env.HTTPSPORT || 3000;
 const server = app.listen(port, () => {
   console.log(`App running on port: ${port}...`);
 });
+// const httpsServer = https.createServer(options, app).listen(httpPort, () => {
+//   console.log(`App running on port: ${httpPort}...`);
+// });
 
 process.on("unhandledRejection", (err) => {
   console.log(err);
@@ -31,4 +42,7 @@ process.on("unhandledRejection", (err) => {
   server.close(() => {
     process.exit(1);
   });
+  // httpsServer.close(() => {
+  //   process.exit(1);
+  // });
 });

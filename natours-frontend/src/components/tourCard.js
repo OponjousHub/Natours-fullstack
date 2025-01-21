@@ -5,11 +5,11 @@ import classes from "./tourCard.module.css";
 import { Link } from "react-router-dom";
 
 function TourCard() {
-  const dataa = useLoaderData();
-  console.log(dataa.data.tours);
+  const data = useLoaderData();
+  console.log(data.data.tours);
   return (
     <ul className={classes.article_box}>
-      {dataa.data.tours.map((tour) => (
+      {data.data.tours.map((tour) => (
         <article key={tour.id} className={classes.tour_box}>
           <div
             style={{
@@ -41,10 +41,7 @@ function TourCard() {
               </div>
               <div className={classes.tour_info}>
                 <Flag size={25} color="#2399ca" />
-                <p>
-                  {`${tour.locations.length} stops`}
-                  {console.log(tour.locations.length)}
-                </p>
+                <p>{`${tour.locations.length} stops`}</p>
               </div>
               <div className={classes.tour_info}>
                 <Users size={25} color="#2399ca" />
@@ -81,7 +78,7 @@ export async function loader({ request, params }) {
       statusCode: 404,
     });
   }
-
+  console.log(response);
   // const res = new Response(response, { statusCode: 200 });
   return response;
 }

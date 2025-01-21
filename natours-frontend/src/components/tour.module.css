@@ -14,7 +14,7 @@
   padding: 2rem 1.5rem;
 
   line-height: 1.6;
-  -webkit-box-decoration-break: clone;
+  /* -webkit-box-decoration-break: clone; */
   box-decoration-break: clone;
   background-image: -webkit-gradient(
     linear,
@@ -63,7 +63,10 @@
   font-size: 1.6rem;
   color: #fff;
   font-weight: 700;
-  border: 1px solid white;
+  min-width: 9rem;
+}
+.describe_place {
+  min-width: 16rem;
 }
 .section {
   display: grid;

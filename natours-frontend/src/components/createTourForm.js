@@ -251,7 +251,7 @@ export async function action({ request, params }) {
   };
   console.log(enteredData);
 
-  const response = await fetch("http://127.0.0.1:8000/api/v1/tours", {
+  const response = await fetch("http://localhost:8000/api/v1/tours", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

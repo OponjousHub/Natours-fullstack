@@ -15,6 +15,7 @@ function Signup() {
             type="text"
             name="fullName"
             placeholder="Firstname Lastname"
+            defaultValue="Joseph Okike"
           />
         </div>
         {/* <div className={classes.data_box}>
@@ -23,7 +24,12 @@ function Signup() {
         </div> */}
         <div className={classes.data_box}>
           <label htmlFor="email ">Email address</label>
-          <input id="email" type="email" name="email" />
+          <input
+            id="email"
+            type="email"
+            name="email"
+            defaultValue="jeen@gmail.com"
+          />
         </div>
         <div className={classes.data_box}>
           <label htmlFor="passwod ">Password</label>
@@ -33,6 +39,7 @@ function Signup() {
             name="passwod"
             minLength={8}
             placeholder="........"
+            defaultValue="pass1234"
           />
         </div>
         <div className={classes.data_box}>
@@ -43,6 +50,7 @@ function Signup() {
             name="passwodCon"
             minLength={8}
             placeholder="........"
+            defaultValue="pass1234"
           />
         </div>
 
@@ -52,7 +60,9 @@ function Signup() {
               Cancel
             </button>
           </Link>
-          <button className={classes.login}>Sing up</button>
+          <button type="submit" className={classes.login}>
+            Sing up
+          </button>
         </p>
       </Form>
     </>
@@ -73,11 +83,10 @@ export async function action({ request, params }) {
   console.log(signupData);
 
   const response = await fetch("https://127.0.0.1:8000/api/v1/signup", {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-      body: JSON.stringify(signupData),
-    },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+
+    body: JSON.stringify(signupData),
   });
   console.log(response);
 
@@ -87,6 +96,8 @@ export async function action({ request, params }) {
     });
     return res;
   } else {
-    return new Response(response, { statusCode: 201 });
+    // return new Response(response, { statusCode: 201 });
+    const ress = response.json();
+    return ress;
   }
 }
