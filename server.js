@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const fs = require("fs");
 const app = require("./app");
-const https = require("https");
+// const https = require("https");
 
 process.on("uncaughtException", (err) => {
   console.log(err.name, err.message);

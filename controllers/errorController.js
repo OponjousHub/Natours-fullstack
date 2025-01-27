@@ -5,6 +5,9 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 404);
 };
 
+const handleJWTError = () =>
+  new AppError("Invalid token! Please log in again.", 401);
+
 const handleDupliicateErrorDB = (err) => {
   const value = err.errmsg.match(/"(?:[^"\\]|\\.)*"/);
   const message = `Duplicate name value ${value}. Please use another value`;
@@ -17,8 +20,8 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 404);
 };
 
-const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
+const sendErrorDev = (err, req, res) => {
+  return res.status(err.statusCode).json({
     status: err.status,
     message: err.message,
     error: err,
@@ -29,7 +32,7 @@ const sendErrorDev = (err, res) => {
 const sendErrorProd = (err, res) => {
   // this is operational error we trust
   if (err.isOperational) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
     });
@@ -39,7 +42,7 @@ const sendErrorProd = (err, res) => {
     console.error(err);
 
     // Send to user
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Something went very wrong!",
     });
@@ -51,13 +54,17 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || "error";
 
   if (process.env.NODE_ENV === "development") {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === "production") {
-    // let err = { ...err };
-    console.log(err.name);
-    if (err.name === "CastError") err = handleCastErrorDB(err);
-    if (err.code === 11000) err = handleDupliicateErrorDB(err);
-    if (err.name === "ValidationError") err = handleValidationErrorDB(err);
-    sendErrorProd(err, res);
+    let error = { ...err };
+    error.message = err.message;
+    // console.log(err.name);
+    if (error.name === "CastError") error = handleCastErrorDB(error);
+    if (error.code === 11000) error = handleDupliicateErrorDB(error);
+    if (error.name === "ValidationError")
+      error = handleValidationErrorDB(error);
+    if (error.name === "JsonWebTokenError") error = handleJWTError();
+    // console.log(err);
+    sendErrorProd(error, res);
   }
 };
