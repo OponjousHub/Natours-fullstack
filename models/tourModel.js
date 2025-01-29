@@ -100,6 +100,12 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -118,6 +124,13 @@ tourSchema.pre("save", function (next) {
   next();
 });
 
+//This is how to embed guides into tour. The IDs entered in the form is used to fetch the doc from DB
+// tourSchema.pre('save', async function(next) {
+//   const guidesPromises = this.guides.map(async id => await User.findById(id))
+//   const guides =await Promises.all(guidesPromises)
+//   next()
+// })
+
 // tourSchema.post("save", function (doc, next) {
 //   console.log(doc);
 //   next();
@@ -133,6 +146,14 @@ tourSchema.pre(/^find/, function (next) {
 tourSchema.post(/^find/, function (doc, next) {
   console.log(`This doc took ${Date.now() - this.start} milliseconds`);
 
+  next();
+});
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "guides",
+    select: "-__v -passwordChangedAt",
+  });
   next();
 });
 
