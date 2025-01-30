@@ -1,39 +1,69 @@
-const reviews = "reviews reviews reviews";
+const Review = require("../models/reviewModel");
+const User = require("../models/userModel");
+const AppError = require("../utils/appError");
+const catchAsyncError = require("../utils/catchAsyncError");
 
-exports.getAllReviews = (req, res) => {
+exports.getAllReviews = catchAsyncError(async (req, res) => {
+  const reviews = await Review.find();
+
   res.status(200).json({
     status: "success",
+    results: reviews.length,
     data: {
       reviews,
     },
   });
-};
+});
 
-exports.getReview = (req, res) => {
+exports.getReview = catchAsyncError(async (req, res) => {
+  const review = await findById(req.params.id);
+
   res.status(200).json({
     status: "success",
     data: {
-      reviews,
+      review,
     },
   });
-};
+});
 
-exports.updateReview = (req, res) => {
+exports.updateReview = catchAsyncError(async (req, res) => {
+  const updatedReview = await Review.findByIdAndUpdate(
+    req.user.id,
+    req.params.id,
+    {
+      runValidators: true,
+      new: true,
+    }
+  );
   res.status(200).json({
     status: "success",
     message: "Updated successfully",
+    data: {
+      updatedReview,
+    },
   });
-};
+});
 
-exports.createReview = (req, res) => {
+exports.createReview = catchAsyncError(async (req, res) => {
+  if (!req.body.tour) req.body.tour = req.params.tourId;
+  if (!req.body.user) req.body.user = req.user.id;
+  const newReview = await Review.create(req.body);
+
   res.status(201).json({
     status: "success",
     message: "Review created successfully",
+    data: {
+      review: newReview,
+    },
   });
-};
-exports.deleteReview = (req, res) => {
-  res(400).json({
+});
+exports.deleteReview = catchAsyncError(async (req, res, next) => {
+  const delReview = await Review.findByIdAndDelete(req.params.id, req.body);
+  if (!delReview)
+    next(new AppError("There is no document found with that ID!", 404));
+
+  res.status(404).json({
     status: "success",
     data: null,
   });
-};
+});
