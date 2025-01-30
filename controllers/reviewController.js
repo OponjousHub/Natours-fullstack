@@ -17,24 +17,24 @@ exports.getAllReviews = catchAsyncError(async (req, res) => {
   });
 });
 
-exports.getReview = catchAsyncError(async (req, res) => {
-  const review = await findById(req.params.id);
+// exports.getMyReview = catchAsyncError(async (req, res) => {
+//   const review = await Review.findById({ user: req.user.id });
 
-  res.status(200).json({
-    status: "success",
-    data: {
-      review,
-    },
-  });
-});
+//   res.status(200).json({
+//     status: "success",
+//     data: {
+//       review,
+//     },
+//   });
+// });
 
 exports.updateReview = catchAsyncError(async (req, res) => {
   const updatedReview = await Review.findByIdAndUpdate(
-    req.user.id,
     req.params.id,
+    req.body,
     {
-      runValidators: true,
       new: true,
+      runValidators: true,
     }
   );
   res.status(200).json({
