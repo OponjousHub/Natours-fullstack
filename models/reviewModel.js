@@ -61,10 +61,17 @@ reviewSchema.statics.calcAgerageRating = async function (tourId) {
     },
   ]);
   console.log(stats);
-  await Tour.findByIdAndUpdate(tourId, {
-    ratingAverage: stats[0].avgRating,
-    ratingQuantity: stats[0].nRating,
-  });
+  if (stats.length > 0) {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingAverage: stats[0].avgRating,
+      ratingQuantity: stats[0].nRating,
+    });
+  } else {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingAverage: 4.5,
+      ratingQuantity: 0,
+    });
+  }
 };
 
 // Calling the abaove function to calculate ratings when creating a review
