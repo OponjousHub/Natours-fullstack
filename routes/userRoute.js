@@ -13,7 +13,12 @@ router.patch(
   authController.protect,
   authController.updatePassword
 );
-router.patch("/updateMe", authController.protect, userController.updateUser);
+router.patch(
+  "/updateMe",
+  authController.protect,
+  userController.uploadUserPhoto,
+  userController.updateUser
+);
 router.get(
   "/getMe",
   authController.protect,

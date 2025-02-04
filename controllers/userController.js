@@ -1,6 +1,31 @@
+const multer = require("multer");
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const catchAsyncError = require("../utils/catchAsyncError");
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/img/users");
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+  },
+});
+
+const multifilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new AppError("Not an image, please upload only an image", 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multifilter,
+});
+exports.uploadUserPhoto = upload.single("photo");
 
 // Function that filtered not allowed fields like role
 const filterObj = (bodyObj, ...wantedFields) => {
@@ -57,6 +82,8 @@ exports.deleteMe = catchAsyncError(async (req, res) => {
 });
 
 exports.updateUser = catchAsyncError(async (req, res, next) => {
+  console.log(req.file);
+  console.log(req.body);
   // Check if user include password data
   if (req.body.password || req.body.passwordConfirm)
     return next(

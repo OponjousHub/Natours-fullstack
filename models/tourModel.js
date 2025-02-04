@@ -121,7 +121,7 @@ tourSchema.virtual("durationWeek").get(function () {
 
 tourSchema.index({ price: 1, ratingAverage: -1 });
 tourSchema.index({ slug: 1 });
-tourSchema.index({ startLocation: "2dsphere" });
+tourSchema.index({ "startLocation.coordinates": "2dsphere" });
 
 // populating the reviews using virtual populate
 tourSchema.virtual("reviews", {
@@ -170,10 +170,10 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 // AGGREGATION MIDDLEWARE
-tourSchema.pre("aggregate", function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  next();
-});
+// tourSchema.pre("aggregate", function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   next();
+// });
 
 const Tour = mongoose.model("Tour", tourSchema);
 module.exports = Tour;
